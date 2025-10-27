@@ -111,7 +111,7 @@ def main():
             cwd='backend',
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
-            bufsize=1
+            bufsize=0
         )
         processes.append(backend)
 
@@ -132,7 +132,7 @@ def main():
             cwd='fontend',
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
-            bufsize=1
+            bufsize=0
         )
         processes.append(frontend)
 
