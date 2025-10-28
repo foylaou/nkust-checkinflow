@@ -1,7 +1,7 @@
 from pydantic import BaseModel
-from setuptools.msvc import SystemInfo
+from typing import Optional
 
 
 class systemHealthresponce(BaseModel):
-    isHealthy: bool
-    info: SystemInfo
+    isHealthy: bool = True
+    info: Optional[str] = "System is running"

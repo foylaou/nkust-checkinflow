@@ -105,20 +105,32 @@ def main():
 
     try:
         # 啟動後端
+
+
+        signal.signal(signal.SIGINT, signal_handler)
+        signal.signal(signal.SIGTERM, signal_handler)
+
+        print('🚀 啟動全端應用...\n')
+
+        # 設定 PYTHONPATH 讓 backend 模組可以正確導入
+        backend_path = os.path.abspath('backend')
+        env = os.environ.copy()
+        env['PYTHONPATH'] = backend_path
         print(f'{Colors.BLUE}🔧 啟動後端服務 (Port 8000)...{Colors.END}')
         backend = subprocess.Popen(
             ['uvicorn', 'main:app', '--reload', '--host', '0.0.0.0', '--port', '8000'],
             cwd='backend',
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
-            bufsize=0
+            bufsize=0,
+            env=env
         )
         processes.append(backend)
 
         # 啟動後端 log 線程
         backend_thread = threading.Thread(
             target=log_output,
-            args=(backend, 'BACKEND', Colors.BLUE, backend_log, combined_log),
+            args=(backend, '後端', Colors.BLUE, backend_log, combined_log),
             daemon=True
         )
         backend_thread.start()
@@ -139,7 +151,7 @@ def main():
         # 啟動前端 log 線程
         frontend_thread = threading.Thread(
             target=log_output,
-            args=(frontend, 'FRONTEND', Colors.CYAN, frontend_log, combined_log),
+            args=(frontend, '前端', Colors.CYAN, frontend_log, combined_log),
             daemon=True
         )
         frontend_thread.start()

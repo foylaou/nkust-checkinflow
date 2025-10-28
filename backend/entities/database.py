@@ -116,9 +116,9 @@ async def init_db():
     # 先建立資料庫（如果不存在）
     await create_database_if_not_exists()
     print("執行初始化表")
-    # 改用絕對導入
+    # 導入models模組以註冊所有的表
     try:
-        from backend import entities as models
+        from entities import models
 
     except ImportError:
         print("⚠️  找不到 models 模組，跳過表格建立")

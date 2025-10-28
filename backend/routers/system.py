@@ -1,6 +1,6 @@
 from fastapi import APIRouter, status
 
-from backend.dto.systemdto import systemHealthresponce
+from dto.systemdto import systemHealthresponce
 
 router = APIRouter(prefix="/api/v1/system", tags=["系統檢測"])
 

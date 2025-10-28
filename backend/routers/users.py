@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, status, Query, Path, Body
 from typing import List, Optional
 from datetime import datetime
-from backend.dto.userdto import UserResponse, UserUpdate, UserCreate
+from dto.userdto import UserResponse, UserUpdate, UserCreate
 
 router = APIRouter(prefix="/api/v1/users", tags=["用戶管理"])
 

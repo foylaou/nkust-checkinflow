@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from contextlib import asynccontextmanager
 from entities.database import init_db, close_db
-from routers import users
+from routers import users, system
 
 
 @asynccontextmanager
@@ -44,6 +44,7 @@ app = FastAPI(
     ]
 )
 app.include_router(users.router)
+app.include_router(system.router)
 
 
 class Item(BaseModel):

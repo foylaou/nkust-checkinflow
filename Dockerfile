@@ -4,6 +4,12 @@ FROM python:3.11-slim
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
 
+ENV DB_USERNAME=foy \
+    DB_PASSWORD=t0955787053S \
+    DB_NAME=checkinflow_db \
+    DB_HOST=172.18.0.2 \
+    DB_PORT=5432
+
 # 安裝基本工具
 RUN apt-get update && apt-get install -y \
     curl \
@@ -37,6 +43,9 @@ RUN rm -f pnpm-lock.yaml && \
 # 複製其餘程式碼
 WORKDIR /app
 COPY . .
+
+# 設定 PYTHONPATH
+ENV PYTHONPATH=/app/backend
 
 # 暴露端口
 EXPOSE 8000 5173
