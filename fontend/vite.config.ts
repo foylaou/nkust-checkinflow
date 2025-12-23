@@ -1,6 +1,7 @@
 import {defineConfig, type LogErrorOptions, type Logger, type LogOptions, type LogType} from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import tailwindcss from '@tailwindcss/vite'
+import path from 'path'
 
 const customLogger: Logger = {
     info(msg: string, _options?: LogOptions) {
@@ -33,6 +34,11 @@ export default defineConfig({
       tailwindcss(),
 
   ],
+    resolve: {
+        alias: {
+            '@': path.resolve(__dirname, './src')
+        }
+    },
     server: {
         hmr: {
             overlay: true
