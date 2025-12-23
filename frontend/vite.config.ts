@@ -1,4 +1,4 @@
-import {defineConfig, type LogErrorOptions, type Logger, type LogOptions, type LogType} from 'vite'
+import {defineConfig, loadEnv, type LogErrorOptions, type Logger, type LogOptions, type LogType} from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import tailwindcss from '@tailwindcss/vite'
 import path from 'path'
@@ -28,30 +28,34 @@ const customLogger: Logger = {
     hasWarned: false
 }
 // https://vite.dev/config/
-export default defineConfig({
-  plugins: [
-      react(),
-      tailwindcss(),
+export default defineConfig(({ mode }) => {
+    const env = loadEnv(mode, process.cwd(), '')
+    return {
+        plugins: [
+            react(),
+            tailwindcss(),
 
-  ],
-    resolve: {
-        alias: {
-            '@': path.resolve(__dirname, './src')
-        }
-    },
-    server: {
-        host: true,
-        hmr: {
-            overlay: true
-        },
-        proxy: {
-            '/api': {
-                target: 'http://localhost:8000',
-                changeOrigin: true,
-                secure: false,
+        ],
+        resolve: {
+            alias: {
+                '@': path.resolve(__dirname, './src')
             }
-        }
-    },
-    customLogger
+        },
+        server: {
+            host: true,
+            allowedHosts: env.VITE_ALLOWED_HOSTS ? env.VITE_ALLOWED_HOSTS.split(',') : [],
+            hmr: {
+                overlay: true
+            },
+            proxy: {
+                '/api': {
+                    target: 'http://localhost:8000',
+                    changeOrigin: true,
+                    secure: false,
+                }
+            }
+        },
+        customLogger
 
+    }
 })
