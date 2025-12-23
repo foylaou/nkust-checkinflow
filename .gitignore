@@ -1,2 +1,6 @@
 /logs/
 /.env
+/backend/uploads/
+/backend/.env
+/fontend/.env.development
+/.env.local
