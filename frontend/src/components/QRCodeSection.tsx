@@ -12,9 +12,9 @@ export default function QRCodeSection({
   onDownload,
   onPrint
 }: QRCodeSectionProps) {
-  const apiUrl = import.meta.env.VITE_API_BASE_URL || '';
+
   const qrCodeSrc = event.qrcode_url 
-    ? `${apiUrl}/api/files/${event.qrcode_url}`
+    ? `/api/files/${event.qrcode_url}`
     : '';
 
   return (
