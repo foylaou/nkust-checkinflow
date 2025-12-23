@@ -3,42 +3,73 @@ version: '3.8'
 services:
   db:
     image: postgres:15-alpine
+    container_name: checkinflow-db
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=checkinflow
+      POSTGRES_USER: ${DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_NAME:-checkinflow}
     ports:
       - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-postgres}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     restart: always
+    networks:
+      - checkinflow-network
 
   backend:
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: checkinflow-backend
     ports:
       - "8000:8000"
     environment:
-      - DB_HOST=db
-      - DB_PORT=5432
-      - DB_NAME=checkinflow
-      - DB_USERNAME=postgres
-      - DB_PASSWORD=postgres
-      - UPLOAD_DIR=/app/uploads
-      - FRONTEND_URL=http://localhost
-      # JWT_SECRET 和 LINE_CHANNEL_ID 等應在 .env 文件中配置
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME:-checkinflow}
+      DB_USERNAME: ${DB_USERNAME:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-postgres}
+      JWT_SECRET: ${JWT_SECRET}
+      LINE_CHANNEL_ID: ${LINE_CHANNEL_ID}
+      LINE_CHANNEL_SECRET: ${LINE_CHANNEL_SECRET}
+      LINE_CALLBACK_URL: ${LINE_CALLBACK_URL}
+      STORAGE_TYPE: ${STORAGE_TYPE:-local}
+      UPLOAD_DIR: /app/uploads
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost}
     volumes:
       - ./backend/uploads:/app/uploads
+      - ./logs:/app/logs
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     restart: always
+    networks:
+      - checkinflow-network
 
   frontend:
-    build: frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8000}
+        VITE_GOOGLE_MAPS_API_KEY: ${VITE_GOOGLE_MAPS_API_KEY}
+    container_name: checkinflow-frontend
     ports:
       - "80:80"
     depends_on:
       - backend
     restart: always
+    networks:
+      - checkinflow-network
 
 volumes:
   postgres_data:
+
+networks:
+  checkinflow-network:
+    driver: bridge

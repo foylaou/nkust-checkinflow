@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { eventService } from '../services/eventService';
 import { templateService } from '../services/templateService';
 import type {EventUpdate, RegistrationTemplate} from '../types';
+import MapLocationPicker from './MapLocationPicker';
 
 interface EventData {
   id: string;
@@ -11,6 +12,9 @@ interface EventData {
   start_time: string;
   end_time: string;
   location: string;
+  latitude?: number;
+  longitude?: number;
+  radius: number;
   max_participants: number | null;
   event_type: string;
   location_validation: boolean;
@@ -46,6 +50,9 @@ export default function EditEventForm({ eventId }: EditEventFormProps) {
     start_time: '',
     end_time: '',
     location: '',
+    latitude: undefined,
+    longitude: undefined,
+    radius: 100,
     max_participants: null,
     event_type: '會議',
     location_validation: false,
@@ -76,6 +83,9 @@ export default function EditEventForm({ eventId }: EditEventFormProps) {
           ...event,
           start_time: formatDateForInput(event.start_time),
           end_time: formatDateForInput(event.end_time),
+          latitude: event.latitude,
+          longitude: event.longitude,
+          radius: event.radius || 100,
           template_id: event.template_id || '',
           survey_start_template_id: event.survey_start_template_id || '',
           survey_end_template_id: event.survey_end_template_id || '',
@@ -163,6 +173,9 @@ export default function EditEventForm({ eventId }: EditEventFormProps) {
           start_time: new Date(formData.start_time).toISOString(),
           end_time: new Date(formData.end_time).toISOString(),
           location: formData.location,
+          latitude: formData.latitude,
+          longitude: formData.longitude,
+          radius: formData.radius,
           max_participants: formData.max_participants || undefined,
           event_type: formData.event_type,
           location_validation: formData.location_validation,
@@ -435,7 +448,7 @@ export default function EditEventForm({ eventId }: EditEventFormProps) {
           </div>
 
           {/* 簽到設定 */}
-          <div className="space-y-2">
+          <div className="space-y-4">
             <div className="flex items-center">
               <input
                 type="checkbox"
@@ -449,6 +462,27 @@ export default function EditEventForm({ eventId }: EditEventFormProps) {
                 啟用位置驗證 (防止遠端打卡)
               </label>
             </div>
+
+            {formData.location_validation && (
+              <div className="ml-6 p-4 bg-gray-50 rounded-md">
+                <p className="text-sm text-gray-600 mb-3">
+                  提示：您可以在上方「活動地點」欄位輸入地址，然後在地圖搜尋框中搜尋該地點
+                </p>
+                <MapLocationPicker
+                  latitude={formData.latitude}
+                  longitude={formData.longitude}
+                  radius={formData.radius}
+                  locationName={formData.location}
+                  onLocationChange={(lat, lng) => {
+                    setFormData(prev => ({ ...prev, latitude: lat, longitude: lng }));
+                  }}
+                  onRadiusChange={(radius) => {
+                    setFormData(prev => ({ ...prev, radius }));
+                  }}
+                />
+              </div>
+            )}
+
             <div className="flex items-center">
               <input
                 type="checkbox"

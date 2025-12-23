@@ -3,7 +3,7 @@
  */
 import axios, {type AxiosInstance, type AxiosRequestConfig, AxiosError } from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+const API_BASE_URL = '/'; // 使用相對路徑，讓請求通過 Proxy (開發環境 Vite, 生產環境 Nginx)
 
 class ApiClient {
   private client: AxiosInstance;
