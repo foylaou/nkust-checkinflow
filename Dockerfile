@@ -6,7 +6,7 @@ ARG BUILDPLATFORM
 
 ENV DB_USERNAME=foy \
     DB_PASSWORD=t0955787053S \
-    DB_NAME=checkinflow_db \
+    DB_NAME=checkinflow \
     DB_HOST=172.18.0.2 \
     DB_PORT=5432
 

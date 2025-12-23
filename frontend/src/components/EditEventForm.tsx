@@ -231,7 +231,7 @@ export default function EditEventForm({ eventId }: EditEventFormProps) {
     );
   }
 
-  const apiUrl = import.meta.env.VITE_API_BASE_URL || '';
+
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
@@ -504,7 +504,7 @@ export default function EditEventForm({ eventId }: EditEventFormProps) {
               <h3 className="text-md font-medium text-gray-700 mb-2">活動 QR Code</h3>
               <div className="flex justify-center">
                 <img
-                  src={`${apiUrl}/api/files/${formData.qrcode_url}`}
+                  src={`/api/files/${formData.qrcode_url}`}
                   alt="活動 QR Code"
                   className="h-48 w-48 object-contain"
                 />
