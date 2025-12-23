@@ -113,6 +113,6 @@ VITE_GOOGLE_MAPS_API_KEY=您的實際_API_KEY
 
 設定完成後重新啟動開發伺服器：
 ```bash
-cd fontend
+cd frontend
 pnpm dev
 ```

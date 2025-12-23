@@ -28,7 +28,7 @@ WORKDIR /app
 
 # 複製依賴檔案
 COPY backend/requirements.txt backend/
-COPY fontend/package.json fontend/pnpm-lock.yaml fontend/
+COPY frontend/package.json fontend/pnpm-lock.yaml fontend/
 
 # 安裝後端依賴
 RUN pip install --no-cache-dir -r backend/requirements.txt

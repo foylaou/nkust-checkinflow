@@ -33,7 +33,7 @@ services:
     restart: always
 
   frontend:
-    build: ./fontend
+    build: frontend
     ports:
       - "80:80"
     depends_on:

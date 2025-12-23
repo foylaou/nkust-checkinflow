@@ -99,8 +99,8 @@ def main():
         sys.exit(1)
 
     # 檢查前端目錄
-    if not os.path.exists('fontend'):
-        print(f'{Colors.RED}❌ 找不到 fontend 目錄{Colors.END}')
+    if not os.path.exists('frontend'):
+        print(f'{Colors.RED}❌ 找不到 frontend 目錄{Colors.END}')
         sys.exit(1)
 
     try:
@@ -141,7 +141,7 @@ def main():
         print(f'{Colors.CYAN}⚛️  啟動前端服務 (Port 5173)...{Colors.END}')
         frontend = subprocess.Popen(
             ['pnpm', 'dev'],
-            cwd='fontend',
+            cwd='frontend',
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             bufsize=0
