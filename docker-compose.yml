@@ -21,13 +21,13 @@ services:
     networks:
       - checkinflow-network
 
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    container_name: checkinflow-backend
+  app:
+    image: nkust-checkinflow:latest
+    container_name: checkinflow-app
+    build: .  # 允許使用 docker-compose build 重新構建
     ports:
-      - "8000:8000"
+      - "8000:8000"  # Backend
+      - "5173:5173"  # Frontend (Vite)
     environment:
       DB_HOST: db
       DB_PORT: 5432
@@ -39,30 +39,15 @@ services:
       LINE_CHANNEL_SECRET: ${LINE_CHANNEL_SECRET}
       LINE_CALLBACK_URL: ${LINE_CALLBACK_URL}
       STORAGE_TYPE: ${STORAGE_TYPE:-local}
-      UPLOAD_DIR: /app/uploads
-      FRONTEND_URL: ${FRONTEND_URL:-http://localhost}
+      UPLOAD_DIR: /app/backend/uploads
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:5173}
+      VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8000}
     volumes:
-      - ./backend/uploads:/app/uploads
       - ./logs:/app/logs
+      - ./backend/uploads:/app/backend/uploads
     depends_on:
       db:
         condition: service_healthy
-    restart: always
-    networks:
-      - checkinflow-network
-
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-      args:
-        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8000}
-        VITE_GOOGLE_MAPS_API_KEY: ${VITE_GOOGLE_MAPS_API_KEY}
-    container_name: checkinflow-frontend
-    ports:
-      - "80:80"
-    depends_on:
-      - backend
     restart: always
     networks:
       - checkinflow-network

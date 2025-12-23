@@ -28,13 +28,13 @@ WORKDIR /app
 
 # 複製依賴檔案
 COPY backend/requirements.txt backend/
-COPY frontend/package.json frontend/pnpm-lock.yaml fontend/
+COPY frontend/package.json frontend/pnpm-lock.yaml frontend/
 
 # 安裝後端依賴
 RUN pip install --no-cache-dir -r backend/requirements.txt
 
 # 安裝前端依賴
-WORKDIR /app/fontend
+WORKDIR /app/frontend
 ENV CI=true
 # 刪除舊的 lock file 重新安裝 (避免架構衝突)
 RUN rm -f pnpm-lock.yaml && \
