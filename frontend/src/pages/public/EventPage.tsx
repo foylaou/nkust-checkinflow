@@ -185,6 +185,14 @@ export default function EventPage() {
     window.location.href = lineAuthUrl;
   };
 
+  const handleLogout = () => {
+    // 清除所有 token
+    localStorage.removeItem(USER_TOKEN_KEY);
+    localStorage.removeItem(USER_ID_KEY);
+    // 重新載入頁面
+    window.location.reload();
+  };
+
   // 組合當前需要的表單欄位
   const getCombinedTemplate = (action: 'checkin' | 'checkout'): RegistrationTemplate | null => {
     if (!event) return null;
@@ -446,6 +454,27 @@ export default function EventPage() {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl">
+      {/* 當前登錄用戶信息 */}
+      {user && (
+        <div className="mb-4 bg-blue-50 border border-blue-200 rounded-lg p-3 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+            <span className="text-sm text-blue-800">
+              當前登錄：<strong>{user.name}</strong>
+              {user.company && <span className="ml-2 text-blue-600">({user.company})</span>}
+            </span>
+          </div>
+          <button
+            onClick={handleLogout}
+            className="text-xs text-blue-600 hover:text-blue-800 underline"
+          >
+            切換帳號
+          </button>
+        </div>
+      )}
+
       <h1 className="text-2xl font-bold text-center mb-6">{event.name}</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

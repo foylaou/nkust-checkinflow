@@ -20,19 +20,26 @@ class ApiClient {
     // 請求攔截器 - 添加 token
     this.client.interceptors.request.use(
       (config) => {
-        // 優先檢查管理員 token
+        const currentPath = window.location.pathname;
+
+        // 根據路由決定使用哪個 token
+        // 如果是公開活動頁面（/event/），優先使用 LINE 用戶 token
+        const isPublicEventPage = currentPath.startsWith('/event/');
+
         const adminToken = localStorage.getItem('access_token');
-        // 其次檢查用戶 token (LINE Login)
         const userToken = localStorage.getItem('line_access_token');
 
-        if (adminToken) {
+        if (isPublicEventPage && userToken) {
+            // 公開活動頁面優先使用用戶 token
+            config.headers.Authorization = `Bearer ${userToken}`;
+        } else if (adminToken) {
+            // 管理員頁面使用管理員 token
             config.headers.Authorization = `Bearer ${adminToken}`;
         } else if (userToken) {
              // 如果沒有管理員 token，但有用戶 token，則使用用戶 token
-             // 注意：後端需要能區分或接受這兩種 token
              config.headers.Authorization = `Bearer ${userToken}`;
         }
-        
+
         return config;
       },
       (error) => Promise.reject(error)
