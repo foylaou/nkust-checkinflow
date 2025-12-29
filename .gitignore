@@ -7,3 +7,6 @@ dist
 components.d.ts
 /pnpm-lock.yaml
 /pnpm-workspace.yaml
+/backend/uploads/
+# 忽略 IDE 設定檔 (如果你不想讓它們一直干擾切換分支)
+.idea/

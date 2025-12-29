@@ -132,7 +132,7 @@ layout: default
 - **QR Code**: qrcode.react
 - **時間處理**: Day.js
 - **樣式**: Tailwind CSS
-- **地圖定位**: Geolocation API
+- **地圖定位**: GoogleMap API
 
 </div>
 
@@ -309,7 +309,7 @@ layout: two-cols
 
 ::right::
 
-<div class="pl-4 ㄌㄣ">
+<div class="pl-4">
 
 ```mermaid
 erDiagram
@@ -622,4 +622,5 @@ CheckinFlow - 讓簽到變得更簡單
 
 <div class="abs-br m-6 text-sm">
   <carbon:qr-code class="inline"/> 掃描 QR Code 體驗 Demo
+  <img style="height: 100px ; weight: 100px" src="./QRCode.jpeg">
 </div>
