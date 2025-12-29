@@ -6,3 +6,4 @@
 /.env.local
 /frontend/node_modules
 pnpm-lock.yaml
+/node_modules/
