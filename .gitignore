@@ -4,3 +4,5 @@
 /backend/.env
 /frontend/.env.development
 /.env.local
+/frontend/node_modules
+pnpm-lock.yaml
