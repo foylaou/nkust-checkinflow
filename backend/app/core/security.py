@@ -5,7 +5,7 @@
 from datetime import datetime, timedelta
 from typing import Optional, Dict, Any
 from passlib.hash import argon2
-from jose import JWTError, jwt
+import jwt
 from fastapi import HTTPException, status
 
 from app.core.config import settings
@@ -97,7 +97,7 @@ def decode_access_token(token: str) -> Dict[str, Any]:
             algorithms=[settings.JWT_ALGORITHM]
         )
         return payload
-    except JWTError as e:
+    except jwt.PyJWTError as e:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail=f"無效的認證憑證: {str(e)}",
@@ -122,5 +122,5 @@ def verify_token(token: str) -> Optional[Dict[str, Any]]:
             algorithms=[settings.JWT_ALGORITHM]
         )
         return payload
-    except JWTError:
+    except jwt.PyJWTError:
         return None
